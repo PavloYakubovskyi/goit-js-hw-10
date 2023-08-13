@@ -48,21 +48,24 @@ function fetchCatByBreed(breedId) {
   });
 }
 
-function createCatMarkup({
-  0: {
-    breeds: {
-      0: { name, temperament, description },
-    },
-    url,
-  },
-}) {
-  // console.log(arr);
-  return `<img src="${url}" alt="${name}" width="800" height="500" />
+function createCatMarkup(arr) {
+  console.log(arr);
+
+  return arr
+    .map(
+      ({
+        url,
+        breeds: {
+          0: { name, temperament, description },
+        },
+      }) => `<img src="${url}" alt="${name}" width="800" height="500" />
   <div>
   <h1 class="title">${name}</h1>
   <p class="description">${description}</p>
   <h2>Temperament:</h2>
-  <p class="description">${temperament}</p></div>`;
+  <p class="description">${temperament}</p></div>`
+    )
+    .join('');
 }
 
 export {
