@@ -23,10 +23,11 @@ fetchBreeds().then(data => {
 
 function onCatId(e) {
   const id = e.target.value;
-  fetchCatByBreed(id)
-    .then(data => {
-      console.log(data);
-      return (refs.catInfo.innerHTML = createCatMarkup(data));
-    })
-    .catch(err => console.error(err));
+  fetchCatByBreed(id);
+  console.log(id);
+  // .then(data => {
+  //   console.log(data);
+  //   return (refs.catInfo.innerHTML = createCatMarkup(data));
+  // })
+  // .catch(err => console.error(err));
 }
