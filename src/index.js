@@ -1,3 +1,6 @@
+import Notiflix, { Notify } from 'notiflix';
+import SlimSelect from 'slim-select';
+
 import {
   fetchBreeds,
   fetchCatByBreed,
@@ -6,26 +9,53 @@ import {
 } from './cat-api';
 
 const refs = {
-  breedSelect: document.getElementById('breedSelect'),
+  breedSelect: document.querySelector('.breed-select'),
   catInfo: document.getElementById('catInfo'),
+  loaderEl: document.querySelector('.loader'),
+  errorEl: document.querySelector('.error'),
 };
 
 refs.breedSelect.addEventListener('change', onCatId);
 
-fetchBreeds().then(data => {
-  //   console.log(data[0]);
-  //   console.log(createBreedSelectMarkup(data));
-  refs.breedSelect.insertAdjacentHTML(
-    'beforeend',
-    createBreedSelectMarkup(data)
-  );
-});
+fetchBreeds()
+  .then(data => {
+    load();
+
+    refs.breedSelect.insertAdjacentHTML(
+      'beforeend',
+      createBreedSelectMarkup(data)
+    );
+  })
+  .then(() => slim())
+  .catch(fetchError);
 
 function onCatId(e) {
   const id = e.target.value;
   fetchCatByBreed(id)
     .then(data => {
+      load();
+
       return (refs.catInfo.innerHTML = createCatMarkup(data));
     })
-    .catch(err => console.error(err));
+    .then(() => success())
+    .catch(fetchError);
+}
+
+function success() {
+  Notify.success('Search was successful', '');
+}
+
+function fetchError() {
+  Report.failure(refs.errorEl.textContent, '');
+}
+
+function load() {
+  refs.breedSelect.hidden = false;
+  refs.loaderEl.classList.remove('loader');
+}
+
+function slim() {
+  new SlimSelect({
+    select: refs.breedSelect,
+  });
 }
