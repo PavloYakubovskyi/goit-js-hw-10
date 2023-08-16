@@ -1,21 +1,12 @@
+import axios from 'axios';
+
+axios.defaults.headers.common['x-api-key'] =
+  'live_n9RYsu6xXJu2x7fSIMilBDonMvDcz944KTSvauIhyOHhdhcDyRpeUJa4t2le08Oa';
+const API_URL = 'https://api.thecatapi.com/v1/breeds';
+const SEARCH_URL = `https://api.thecatapi.com/v1/images/search`;
+
 function fetchBreeds() {
-  const BASE_URL = 'https://api.thecatapi.com/v1';
-  const END_POINT = '/breeds';
-
-  const options = {
-    Headers: {
-      'x-api-key':
-        'live_n9RYsu6xXJu2x7fSIMilBDonMvDcz944KTSvauIhyOHhdhcDyRpeUJa4t2le08Oa',
-    },
-  };
-
-  return fetch(`${BASE_URL}${END_POINT}`, options).then(resp => {
-    if (!resp.ok) {
-      throw new Error(resp.statusText);
-    }
-
-    return resp.json();
-  });
+  return axios.get(API_URL);
 }
 
 function createBreedSelectMarkup(arr) {
@@ -25,21 +16,7 @@ function createBreedSelectMarkup(arr) {
 }
 
 function fetchCatByBreed(breedId) {
-  const FORECAST_URL = 'https://api.thecatapi.com/v1/images/search';
-  const API_KEY =
-    'live_n9RYsu6xXJu2x7fSIMilBDonMvDcz944KTSvauIhyOHhdhcDyRpeUJa4t2le08Oa';
-
-  const params = new URLSearchParams({
-    breed_ids: breedId,
-  });
-
-  return fetch(`${FORECAST_URL}?api_key=${API_KEY}&${params}`).then(resp => {
-    if (!resp.ok) {
-      throw new Error(resp.statusText);
-    }
-
-    return resp.json();
-  });
+  return axios.get(`${SEARCH_URL}?breed_ids=${breedId}`);
 }
 
 function createCatMarkup(arr) {
@@ -68,3 +45,41 @@ export {
   createBreedSelectMarkup,
   createCatMarkup,
 };
+
+// function fetchBreeds() {
+//   const BASE_URL = 'https://api.thecatapi.com/v1';
+//   const END_POINT = '/breeds';
+
+//   const options = {
+//     Headers: {
+//       'x-api-key':
+//         'live_n9RYsu6xXJu2x7fSIMilBDonMvDcz944KTSvauIhyOHhdhcDyRpeUJa4t2le08Oa',
+//     },
+//   };
+
+//   return fetch(`${BASE_URL}${END_POINT}`, options).then(resp => {
+//     if (!resp.ok) {
+//       throw new Error(resp.statusText);
+//     }
+
+//     return resp.json();
+//   });
+// }
+
+// function fetchCatByBreed(breedId) {
+//   const FORECAST_URL = 'https://api.thecatapi.com/v1/images/search';
+//   const API_KEY =
+//     'live_n9RYsu6xXJu2x7fSIMilBDonMvDcz944KTSvauIhyOHhdhcDyRpeUJa4t2le08Oa';
+
+//   const params = new URLSearchParams({
+//     breed_ids: breedId,
+//   });
+
+//   return fetch(`${FORECAST_URL}?api_key=${API_KEY}&${params}`).then(resp => {
+//     if (!resp.ok) {
+//       throw new Error(resp.statusText);
+//     }
+
+//     return resp.json();
+//   });
+// }

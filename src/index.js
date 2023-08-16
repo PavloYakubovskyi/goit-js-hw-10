@@ -18,12 +18,12 @@ const refs = {
 refs.breedSelect.addEventListener('change', onCatId);
 
 fetchBreeds()
-  .then(data => {
+  .then(arr => {
     load();
 
     refs.breedSelect.insertAdjacentHTML(
       'beforeend',
-      createBreedSelectMarkup(data)
+      createBreedSelectMarkup(arr.data)
     );
   })
   .then(() => slim())
@@ -32,10 +32,10 @@ fetchBreeds()
 function onCatId(e) {
   const id = e.target.value;
   fetchCatByBreed(id)
-    .then(data => {
+    .then(obj => {
       load();
 
-      return (refs.catInfo.innerHTML = createCatMarkup(data));
+      return (refs.catInfo.innerHTML = createCatMarkup(obj.data));
     })
     .then(() => success())
     .catch(fetchError);
