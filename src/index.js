@@ -32,12 +32,20 @@ fetchBreeds()
 function onCatId(e) {
   const id = e.target.value;
   fetchCatByBreed(id)
-    .then(obj => {
+    .then(arr => {
       load();
 
-      return (refs.catInfo.innerHTML = createCatMarkup(obj.data));
+      const catData = arr.data;
+
+      if (!Array.isArray(catData) || catData.length === 0 || !catData[0].url) {
+        refs.catInfo.innerHTML = '';
+        fetchError('Дані для цієї породи відсутні');
+        return;
+      }
+
+      refs.catInfo.innerHTML = createCatMarkup(catData);
+      success(); // Виклик функції успіху
     })
-    .then(() => success())
     .catch(fetchError);
 }
 
@@ -45,8 +53,13 @@ function success() {
   Notify.success('Search was successful', '');
 }
 
-function fetchError() {
-  Report.failure(refs.errorEl.textContent, '');
+function fetchError(message) {
+  Notify.failure(message, {
+    position: 'center-center',
+    timeout: 3000,
+    width: '400px',
+    fontSize: '24px',
+  });
 }
 
 function load() {
